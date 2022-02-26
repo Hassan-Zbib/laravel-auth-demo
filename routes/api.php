@@ -2,6 +2,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Contact\ContactController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -12,6 +13,10 @@ use App\Http\Controllers\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+
+// auth routes
+
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
@@ -22,3 +27,17 @@ Route::group([
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/user-profile', [AuthController::class, 'userProfile']);    
 });
+
+// contact routes @public
+
+// Route::group([
+//     'middleware' => 'api',
+//     'prefix' => 'contact'
+// ], function ($router) {
+//     Route::post('/add', [ContactController::class, 'addContact'])->name('contact:add');
+// });
+
+Route::post('/contact/add', [ContactController::class, 'addContact'])->name('contact:add');
+
+// user routes @private
+
