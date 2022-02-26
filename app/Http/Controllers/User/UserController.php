@@ -7,6 +7,13 @@ use Validator;
 
 class UserController extends AuthController {
 
+    public function __construct()
+    {
+        // get user id
+        $this->user = JWTAuth::parseToken()->authenticate();
+    }
+
+    
     public function updateUser(Request $request) {
         $data = $request->all();
         // data validation

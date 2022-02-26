@@ -35,4 +35,4 @@ Route::post('/contact/add', [ContactController::class, 'addContact'])->name('con
 
 // user routes @private
 
-Route::post('/user/update', [UserController::class, 'updateUser'])->name('user:update');
+Route::post('/user/update', [UserController::class, 'jwt.verify', 'updateUser'])->name('user:update')->middleware(['api', 'jwt.verify']);;
