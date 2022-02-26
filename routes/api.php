@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Contact\ContactController;
+use App\Http\Controllers\User\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,14 +31,8 @@ Route::group([
 
 // contact routes @public
 
-// Route::group([
-//     'middleware' => 'api',
-//     'prefix' => 'contact'
-// ], function ($router) {
-//     Route::post('/add', [ContactController::class, 'addContact'])->name('contact:add');
-// });
-
 Route::post('/contact/add', [ContactController::class, 'addContact'])->name('contact:add');
 
 // user routes @private
 
+Route::post('/user/update', [UserController::class, 'updateUser'])->name('user:update');

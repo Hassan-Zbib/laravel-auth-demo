@@ -25,6 +25,6 @@ class ContactController extends Controller {
         //  Store data in database
         Contact::create($data);
         // return
-        return response()->json(["message"=>"Contact Message Sent"], 200);
+        return response()->json(["message"=>"Contact Message Sent"], 201);
     }
 }
