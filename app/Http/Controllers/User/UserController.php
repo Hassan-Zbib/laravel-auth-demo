@@ -1,48 +1,36 @@
 <?php
 namespace App\Http\Controllers\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Validator;
+use JWTAuth;
 
-class UserController extends AuthController {
+class UserController extends Controller {
 
-    public function __construct()
-    {
-        // get user id
-        $this->user = JWTAuth::parseToken()->authenticate();
-    }
-
+    protected $user;
     
     public function updateUser(Request $request) {
+        $this->user = JWTAuth::parseToken()->authenticate();
         $data = $request->all();
         // data validation
         $validator =  Validator::make($data, [
-            'name' =>'required|min:4|string|max:255',
-            'email'=>'required|email|string|max:255'
+            'name' => 'sometimes|required|string|between:2,100',
+            'email' => 'sometimes|required|string|email|max:100|unique:users',
+            'password' => 'sometimes|required|string|min:6',
          ]);
 
-        //  if ($validator->fails()) {
-        //     return response()->json(["message"=>"Bad Request",
-        //     "errors"=>$validator->errors()], 400);
-        // } 
-        // //  Store data in database
-        // Contact::create($data);
-        // // return
-        // return response()->json(["message"=>"Contact Message Sent"], 200);
+         if ($validator->fails()) {
+            return response()->json(["message"=>"Bad Request",
+            "errors"=>$validator->errors()], 400);
+        }; 
+
+        // update user
+        $this->user->name = isset($data['name']) ? $data['name'] : $this->user->name;
+        $this->user->email = isset($data['email']) ? $data['email'] : $this->user->email;
+        $this->user->password = isset($data['password']) ? bcrypt($data['password']) : $this->user->password;
+        $this->user->save();
+
+        return response()->json(["message"=>"User Updated"], 200);
     }
 }
-
-// public function profileUpdate(Request $request){
-//     //validation rules
-
-//     $request->validate([
-//         'name' =>'required|min:4|string|max:255',
-//         'email'=>'required|email|string|max:255'
-//     ]);
-//     $user =Auth::user();
-//     $user->name = $request['name'];
-//     $user->email = $request['email'];
-//     $user->save();
-//     return back()->with('message','Profile Updated');
-// }
